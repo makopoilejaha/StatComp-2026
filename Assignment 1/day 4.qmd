@@ -1,0 +1,23 @@
+---
+title: "Practical Day 4"
+format: html
+---
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+
+View(flights)
+glimpse(flights)
+
+```
+
+```{r}
+flight1<- flights %>% filter(month ==1)
+carrier_vec <-flight1 %>% distinct(carrier)
+
+group_by(carrier_vec=carrier)
+
+
+
+```

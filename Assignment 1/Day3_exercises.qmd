@@ -1,0 +1,25 @@
+---
+title: "Introduction to Statistical Computing Exercises"
+format: html
+---
+
+## 4 Plot curve/function
+
+```{r}
+f <- function(x) sin(x)
+  curve(f,from = -2,to= 2,type="l", main='Sine Function',lwd=2, col='firebrick', xlab = x, ylab = f(x) )
+```
+
+## 5 QQ-plot
+
+```{r}
+set.seed(1)
+ rnorm(1000, mean = 0, sd = 1)
+ 
+```
+
+```{r}
+#| echo: false
+library(car)
+qqPlot(x, envelope = 0.95, ylim = c(-5, 5))
+```
