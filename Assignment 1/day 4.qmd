@@ -80,22 +80,25 @@ delay_flights <- dt_flights_route %>%group_by(origin,dest,carrier) %>% summarise
 delay_flights
 ```
 ```{r}
-#worst avg. arrival delay
+#maximum avg. arrival delay for each route
 worst_delay <- delay_flights %>%
   group_by(origin,dest) %>% 
   slice_max(average_arrival_delay,n=1,with_ties = FALSE )
 worst_delay
+```
 
-# Find the BEST airline for each route
+```{r}
+# minimum avg. delay time for each route
 best_delay <- delay_flights %>%
   group_by(origin, dest) %>%
   slice_min(average_arrival_delay, n = 1, with_ties = FALSE)
+best_delay
 ```
 
 
 ```{r}
-# Combine them and calculate the gap
-route_gaps <- bind_rows(worst_per_route, best_per_route) %>%
+# 
+route_gaps <- bind_rows(worst_delay, best_delay) %>%
   group_by(origin, dest) %>%
   summarise(
     max_delay = max(average_arrival_delay),
@@ -106,12 +109,27 @@ route_gaps <- bind_rows(worst_per_route, best_per_route) %>%
   slice_max(gap, n = 1)
 
 route_gaps
-
-
-worst_delay %>% left_join(best_delay) %>% group_by(origin,dest) %>% summarise(mutate(gap= max_delay))
-
 ```
-
+```{r}
+gap <- worst_delay %>% 
+  bind_rows(best_delay) %>% 
+  group_by(origin, dest) %>% 
+  summarise(
+    max_delay = max(average_arrival_delay),
+    min_delay = min(average_arrival_delay),
+    gap = max_delay - min_delay,
+    worst_airline = carrier[which.max(average_arrival_delay)],
+    best_airline  = carrier[which.min(average_arrival_delay)],
+    .groups = "drop"
+  )
+greatest_gap <-gap %>% slice_max(gap)
+greatest_gap
+```
+ 
+```{r}
+flights %>% filter(origin=='JFK', dest=='ATL')
+```
+Looking at the route data the huge difference could be caused by
 ## Question 7
 ```{r}
 
