@@ -6,15 +6,16 @@ format: html
 ## 4 Plot curve/function
 
 ```{r}
-f <- function(x) sin(x)
-  curve(f,from = -2,to= 2,type="l", main='Sine Function',lwd=2, col='firebrick', xlab = x, ylab = f(x) )
+f<- function(x)sin(x)
+  curve(f,from = -2,to= 2,type="l", main='Sine Function',lwd=2, col='firebrick', xlab = 'x', ylab = 'sin(x)' )
 ```
 
 ## 5 QQ-plot
 
 ```{r}
-set.seed(1)
+set.seed(123)
  rnorm(1000, mean = 0, sd = 1)
+ 
  
 ```
 
