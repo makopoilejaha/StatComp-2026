@@ -1,0 +1,17 @@
+{
+  "hash": "d373c0e7f73019a6793ab8c8b17443c1",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Introduction to Statistical Computing Exercises\"\nformat: html\n---\n\n## 4 Plot curve/function\n\n\n::: {.cell}\n\n```{.r .cell-code}\nf<- function(x)sin(x)\n  curve(f,from = -2,to= 2,type=\"l\", main='Sine Function',lwd=2, col='firebrick', xlab = 'x', ylab = 'sin(x)' )\n```\n\n::: {.cell-output-display}\n![](Day3_exercises_files/figure-html/unnamed-chunk-1-1.png){width=672}\n:::\n:::\n\n\n## 5 QQ-plot\n\n\n::: {.cell}\n\n```{.r .cell-code}\nset.seed(123)\nx<- rt(1000, df=1) #cauchy distribution\n\n#simulating theoretical quantiles using order stats\nN<- length(x)\nz<-sort(rnorm(100000, mean = 0, sd = 1))\np <- (1:N-0.5)/N\nz_theoretical <- quantile(z,probs=p,type=1) \n\nx_sample <-sort(x)\n\nB<- 1000\nsim_mat <-matrix(NA,nrow = N, ncol = B)\nfor (b in 1:B) {\n  sim_mat[,b]<-sort(rnorm(N)) #role of b\n  \n}\n\nlower <-apply(sim_mat, 1, quantile, 0.025)\nupper <- apply(sim_mat, 1, quantile, 0.975)\n \n \nplot(z_theoretical,x_sample,\n     pch=16, cex=0.6,\n     ylim=c(-5,5),\n     xlab= \"Theoretical Normal Quantiles\",\n     ylab=\"Sample Quantiles\",\n     main = \"QQ-plot vs Normal with 95% Envelope\")\nlines(z_theoretical,lower,col='firebrick',lty=2)\nlines(z_theoretical,upper, col='firebrick', lty=2)\nabline(0,1,col='blue')\n```\n\n::: {.cell-output-display}\n![](Day3_exercises_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(car)\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nLoading required package: carData\n```\n\n\n:::\n\n```{.r .cell-code}\nqqPlot(x, envelope = 0.95, ylim = c(-5, 5))\n```\n\n::: {.cell-output-display}\n![](Day3_exercises_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 727 868\n```\n\n\n:::\n:::\n\n",
+    "supporting": [
+      "Day3_exercises_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
