@@ -141,12 +141,15 @@ greatest_gap
 flights %>% filter(origin=='JFK', dest=='ATL')
 ```
 
-Looking at the route data the huge difference could be caused by
+Looking at the route data the huge difference could be caused by airline-specific operational factors such as scheduling, hub congestion, and fleet utilisation rather than route characteristics alone especially between 9E and DL.
 
 ## Question 7
 
 ```{r}
-
+#| echo: true
+#| message: false
+#| warning: false
+#| results: hide
 if (!requireNamespace("remotes", quietly = TRUE)) {
   install.packages("remotes")
 }
@@ -255,3 +258,5 @@ NA, 77, 80, 115, 85, 88, 109, NA, 71, 90, 94, 91, 87, 113, 93,
 ), class = c("tbl_df", "tbl", "data.frame"))
 view_cols(unclean_data)
 ```
+
+From the output we can see what inconsistencies exist in data like the typo of femal instead of female. We also see the nulls.
