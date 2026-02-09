@@ -1,0 +1,53 @@
+---
+title: "Introduction to Statistical Computing Exercises"
+format: html
+---
+
+## 4 Plot curve/function
+
+```{r}
+f<- function(x)sin(x)
+  curve(f,from = -2,to= 2,type="l", main='Sine Function',lwd=2, col='firebrick', xlab = 'x', ylab = 'sin(x)' )
+```
+
+## 5 QQ-plot
+
+```{r}
+set.seed(123)
+x<- rt(1000, df=1) #cauchy distribution
+
+#simulating theoretical quantiles using order stats
+N<- length(x)
+z<-sort(rnorm(100000, mean = 0, sd = 1))
+p <- (1:N-0.5)/N
+z_theoretical <- quantile(z,probs=p,type=1) 
+
+x_sample <-sort(x)
+
+B<- 1000
+sim_mat <-matrix(NA,nrow = N, ncol = B)
+for (b in 1:B) {
+  sim_mat[,b]<-sort(rnorm(N)) #role of b
+  
+}
+
+lower <-apply(sim_mat, 1, quantile, 0.025)
+upper <- apply(sim_mat, 1, quantile, 0.975)
+ 
+ 
+plot(z_theoretical,x_sample,
+     pch=16, cex=0.6,
+     ylim=c(-5,5),
+     xlab= "Theoretical Normal Quantiles",
+     ylab="Sample Quantiles",
+     main = "QQ-plot vs Normal with 95% Envelope")
+lines(z_theoretical,lower,col='firebrick',lty=2)
+lines(z_theoretical,upper, col='firebrick', lty=2)
+abline(0,1,col='blue')
+```
+
+```{r}
+library(car)
+qqPlot(x, envelope = 0.95, ylim = c(-5, 5))
+
+```

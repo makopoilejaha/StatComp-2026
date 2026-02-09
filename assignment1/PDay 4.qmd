@@ -3,7 +3,7 @@ title: "Practical Day 4"
 format: html
 ---
 
-## Question 1
+##Question 1
 
 ```{r}
 library(tidyverse)
@@ -14,8 +14,8 @@ glimpse(flights)
 
 ```
 
-## Question 2
 
+## Question 2
 ```{r}
 
 Distances<- flights %>% filter(month==1)%>% 
@@ -27,9 +27,7 @@ Distances
 ```
 
 ## Question 3
-
 We get sd = NA when there is only one observation and we get sd = 0 when all the observations are equal.
-
 ```{r}
 # Showing the chosen carriers sd and relevant information
 carrier_data <- flights %>%
@@ -45,11 +43,11 @@ carrier_data <- flights %>%
 
 print(carrier_data)
 ```
-
-Carrier OO has just one flight so its sd = NA. This is because n-1 is going to become 0 making the sd undefined. The rest of the carriers show that they have just one unique value showing that the distances are all the same value resulting in sd of 0.
+Carrier OO has just one flight so its sd = NA. This is because n-1 is going to become 0 making the sd undefined.
+The rest of the carriers show that they have just one unique value showing that the distances are all the same value
+resulting in sd of 0.
 
 ## Question4
-
 ```{r}
 df_wide<- flights %>% 
   group_by(month,carrier) %>% 
@@ -60,18 +58,14 @@ df_wide<- flights %>%
 )
 print(df_wide)
 ```
-
 ## Question 5
-
 ```{r}
 flight_prop<-flights %>% 
   summarise(proportion = mean(dep_delay>0 & arr_delay<=0, na.rm=TRUE))
 flight_prop
 
 ```
-
-## Question 6
-
+## Question 6 
 ```{r}
 dt_flights<- flights
 dt_flights_route<-dt_flights %>% 
@@ -81,7 +75,6 @@ dt_flights_route<-dt_flights %>%
 dt_flights_route
 
 ```
-
 ```{r}
 delay_flights <- dt_flights_route %>%
   group_by(origin,dest,carrier) %>% 
@@ -89,7 +82,6 @@ delay_flights <- dt_flights_route %>%
   left_join(airlines, by='carrier')
 delay_flights
 ```
-
 ```{r}
 #maximum avg. arrival delay for each route
 worst_delay <- delay_flights %>%
@@ -106,6 +98,7 @@ best_delay <- delay_flights %>%
 best_delay
 ```
 
+
 ```{r}
 # 
 route_gaps <- bind_rows(worst_delay, best_delay) %>%
@@ -120,7 +113,6 @@ route_gaps <- bind_rows(worst_delay, best_delay) %>%
 
 route_gaps
 ```
-
 ```{r}
 gap <- worst_delay %>% 
   bind_rows(best_delay) %>% 
@@ -136,15 +128,15 @@ gap <- worst_delay %>%
 greatest_gap <-gap %>% slice_max(gap)
 greatest_gap
 ```
-
+ 
 ```{r}
 flights %>% filter(origin=='JFK', dest=='ATL')
 ```
-
 Looking at the route data the huge difference could be caused by
-
 ## Question 7
-
 ```{r}
 
 ```
+
+
+
