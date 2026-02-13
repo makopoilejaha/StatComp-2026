@@ -1,0 +1,63 @@
+---
+title: "Practice Template"
+---
+
+## PART A
+
+```{r}
+library(tidyverse)
+data("airquality")
+View(airquality)
+airquality<- as_tibble(airquality)
+airquality<- airquality %>% mutate(across(everything(),as.numeric)
+airquality <- airquality[complete.cases(airquality), ]  
+
+View((airquality))
+airquality_m<-airquality %>% select(Ozone,Solar.R,Wind,Temp)  
+#apply(margin)
+for (i in 1:length())
+if (is.na(airquality_m)){
+  <-median()
+}
+
+
+
+
+##use clean<- airq %>% ---mutate across,c(o,....) 
+```
+
+## Question 3
+
+1.  
+
+    ```{r}
+    set.seed(2)
+    lamTrue <- runif(1, 2, 4) #were not give lambda so essentially we 'simulate it' as a uniform rv
+    xSmall <- rpois(10, lamTrue)
+
+    # Example large dataset
+    xLarge <- rpois(1000, lamTrue)
+
+    x<- rpois(1000,lambda = lamTrue)
+    likelihood_func <- function(lambda,x){
+      dist= (((lambda^x)*exp(-lambda))/factorial(x))
+        likelihood=prod(dist)
+        return(likelihood)
+    }
+    likelihood_func(x,2)
+    ```
+
+    ```{r}
+    #if we want to fix the lambda 
+    log_likelihood_func<- function(lambda, x){
+      log_dist<- xlog(lambda)
+    }
+    ```
+
+2\.
+
+```{r}
+lam= seq(2,4,0.5)
+
+plot(, )
+```
