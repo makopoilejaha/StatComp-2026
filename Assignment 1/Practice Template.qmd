@@ -57,7 +57,7 @@ if (is.na(airquality_m)){
 2\.
 
 ```{r}
-lam= seq(2,4,0.5)
+
 
 plot(, )
 ```

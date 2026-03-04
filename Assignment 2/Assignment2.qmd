@@ -1,0 +1,162 @@
+---
+title: "Assignment2"
+---
+
+## Question 1
+
+```{r}
+library(foreach)
+library(doParallel)
+library(parallel)
+library(MASS)
+library(iterators)
+library(boot)
+```
+
+```{r}
+#Define a function that returns the mean and variance of a vector
+stats<- function(x){
+  smean<- mean(x)
+  svariance<- var(x)
+  vec<- c(smean,svariance)
+  return(vec)
+}
+result<- foreach(i=1:100,combine=rbind)%do%{
+  sampled<- rexp(5000,1)
+  stats(sampled)
+}
+result
+
+```
+
+## Question 2
+
+```{r}
+cl<- makeCluster(4)
+registerDoParallel(cl)
+
+#Set no of Bootstrapping samples
+B<- 1000
+
+#Parallel bootsrapping
+system.time(result2<- foreach(i=1:B,combine=rbind,.packages = 'MASS')%dopar%{
+  
+  median(sample(galaxies,replace =TRUE))
+})
+
+stopCluster(cl)
+
+#Serial bootstrapping for comparison 
+system.time(result2<- foreach(i=1:B,combine=c,.packages = 'MASS')%do%{
+  
+  median(sample(galaxies,replace =T))
+})
+
+```
+
+## Question 3
+
+```{r}
+set.seed(1234)
+
+tsamples<- rexp(n=50,rate=1)
+
+truemean<- 1
+
+B<- 1000
+
+cover<-0 #No of confidence intervals
+  
+for(i in 1:1000)
+  {
+  sampled<- rexp(50,1)
+  
+ 
+  bootmean<- function(data, indices) {       #Bootstrap samples
+    return(mean(data[indices]))
+ }
+
+  bootres <- boot(sampled,bootmean,R=B)
+  
+  
+  #percentile bootsrap
+  cint<- boot.ci(bootres,type="perc")$percent[4:5]
+  
+  if (!is.null(cint) && truemean >= cint[1] && truemean <= cint[2]) {
+    cover <- cover + 1
+    
+  }
+  
+}
+
+#Estimated coverage probability
+
+cov.prob<- cover/1000 
+
+cov.prob
+```
+
+## Question 4
+
+```{r}
+#| warning: false
+set.seed(1234)
+
+
+random_vectors_list <- as.list(irnorm(5, count = 3))#  iterator output to  list 
+
+# Register a parallel backend 
+num_cores <- parallel::detectCores(logical = FALSE)
+if (num_cores > 1) {
+  cl <- makeCluster(min(2, num_cores))  # Use up to 2 cores
+  registerDoParallel(cl)
+} else {
+  registerDoSEQ() 
+}
+
+# Use foreach 
+results <- foreach(v = random_vectors_list, .combine = c) %dopar% {
+  max(v)
+}
+
+# Stop the parallel cluster
+if (exists("cl")) stopCluster(cl)
+
+results
+
+```
+
+## Question 6
+
+```{r}
+#| warning: false
+set.seed(1234)
+
+random_vectors_list <- as.list(replicate(3, rnorm(5), simplify = FALSE))# Generate random vectors
+
+
+num_cores <- detectCores(logical = FALSE)# Register parallel backend
+cl <- makeCluster(min(2, num_cores))
+registerDoParallel(cl)
+
+
+system.time({
+  res_parLapply <- parLapply(cl, random_vectors_list, max)  # parLapply
+})
+
+
+system.time({
+  result_foreach <- foreach(v = random_vectors_list, .combine = c) %dopar% { #Using foreach with %dopar%
+    Sys.sleep(0.001)
+    max(v)
+  }
+})
+
+# Using replicate
+system.time({
+  result_replicate <- sapply(random_vectors_list, max)
+})
+
+# Stop the cluster
+stopCluster(cl)
+```

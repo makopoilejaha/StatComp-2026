@@ -1,0 +1,54 @@
+---
+title: "Rexecises_Rbasics"
+author: 'Ines'
+---
+
+## Data Input
+
+#### Basics: Exercise 1
+
+```{r}
+install.packages("DAAG")
+library(DAAG)
+library(tidyverse)
+datafile('fuel')
+```
+
+```{r}
+library(DAAG)
+data('molclock1')
+read.table('molclock1.txt')
+```
+
+```{r}
+getwd()
+molclock1 <- read.table('molclock1.txt', header = TRUE)
+```
+
+#### Exercise 3 Missing values
+
+```{r}
+data('rainforest')
+with(rainforest,table(complete.cases(root),species))
+  #Foreachspecies,howmanyrows o root variable are“complete”, i.e.,have no valuesthataremissing?
+```
+
+```{r}
+rainforest %>% filter(is.na(root)) #returns rows where root is NA
+
+```
+
+```{r}
+rainforest %>% filter(if_any(everything(),is.na)) #returns all rows where there is NA in atleast one of the variables
+#everything checks all columns
+
+rainforest %>% filter(if_all(everything(),is.na)) #returns rows where all columns are NA
+
+rainforest %>% filter(!if_any(everything(),is.na)) #returns rows without NAs
+```
+
+```{r}
+rainforest[complete.cases(rainforest),] #returns columns with no NA values
+```
+
+#### 

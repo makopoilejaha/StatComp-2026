@@ -1,0 +1,142 @@
+---
+  title: "Practical Day 4"
+format: html
+---
+  
+  ##Question 1
+  
+  ```{r}
+library(tidyverse)
+library(nycflights13)
+
+View(flights)
+glimpse(flights)
+
+```
+
+
+## Question 2
+```{r}
+
+Distances<- flights %>% filter(month==1)%>% 
+  group_by(carrier) %>%                    # group_by also handles finding distinct values 
+  summarise(mean_distance=mean(distance, na.rm = TRUE),
+            sd_distance = sd(distance, na.rm = TRUE)) %>% 
+  arrange(mean_distance)
+Distances
+```
+
+## Question 3
+We get sd = NA when there is only one observation and we get sd = 0 when all the observations are equal.
+```{r}
+# Showing the chosen carriers sd and relevant information
+carrier_data <- flights %>%
+  filter(month == 1) %>%
+  group_by(carrier) %>%
+  summarise(
+    num_flights = n(),
+    unique_distances = n_distinct(distance),
+    sd_dist = sd(distance)
+  ) %>%
+  # Filter for the cases specified:
+  filter(num_flights == 1 | sd_dist == 0)
+
+print(carrier_data)
+```
+Carrier OO has just one flight so its sd = NA. This is because n-1 is going to become 0 making the sd undefined.
+The rest of the carriers show that they have just one unique value showing that the distances are all the same value
+resulting in sd of 0.
+
+## Question4
+```{r}
+df_wide<- flights %>% 
+  group_by(month,carrier) %>% 
+  summarise(average_dep_delay= mean(dep_delay, na.rm =TRUE),.groups = 'drop') %>% 
+  pivot_wider(
+    names_from = carrier ,
+    values_from = average_dep_delay
+  )
+print(df_wide)
+```
+## Question 5
+```{r}
+flight_prop<-flights %>% 
+  summarise(proportion = mean(dep_delay>0 & arr_delay<=0, na.rm=TRUE))
+flight_prop
+
+```
+## Question 6 
+```{r}
+dt_flights<- flights
+dt_flights_route<-dt_flights %>% 
+  group_by(origin,dest) %>%       #groups by routes
+  filter(n_distinct(carrier)>1) %>%  #groups with more than 1 airline flies
+  ungroup()
+dt_flights_route
+
+```
+```{r}
+delay_flights <- dt_flights_route %>%
+  group_by(origin,dest,carrier) %>% 
+  summarise(average_arrival_delay= mean(arr_delay,na.rm = TRUE))%>% 
+  left_join(airlines, by='carrier')
+delay_flights
+```
+```{r}
+#maximum avg. arrival delay for each route
+worst_delay <- delay_flights %>%
+  group_by(origin,dest) %>% 
+  slice_max(average_arrival_delay,n=1,with_ties = FALSE )
+worst_delay
+```
+
+```{r}
+# minimum avg. delay time for each route
+best_delay <- delay_flights %>%
+  group_by(origin, dest) %>%
+  slice_min(average_arrival_delay, n = 1, with_ties = FALSE)
+best_delay
+```
+
+
+```{r}
+# 
+route_gaps <- bind_rows(worst_delay, best_delay) %>%
+  group_by(origin, dest) %>%
+  summarise(
+    max_delay = max(average_arrival_delay),
+    min_delay = min(average_arrival_delay),
+    gap = max_delay - min_delay,
+    .groups = "drop"
+  ) %>%
+  slice_max(gap, n = 1)
+
+route_gaps
+```
+```{r}
+gap <- worst_delay %>% 
+  bind_rows(best_delay) %>% 
+  group_by(origin, dest) %>% 
+  summarise(
+    max_delay = max(average_arrival_delay),
+    min_delay = min(average_arrival_delay),
+    gap = max_delay - min_delay,
+    worst_airline = carrier[which.max(average_arrival_delay)],
+    best_airline  = carrier[which.min(average_arrival_delay)],
+    .groups = "drop"
+  )
+greatest_gap <-gap %>% slice_max(gap)
+greatest_gap
+```
+
+```{r}
+flights %>% filter(origin=='JFK', dest=='ATL')
+```
+Looking at the route data the huge difference could be caused by
+## Question 7
+```{r}
+
+```
+
+
+

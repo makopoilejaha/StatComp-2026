@@ -1,0 +1,35 @@
+---
+title: "Monte Carlo Exercises"
+---
+
+## Question 1
+
+```{r}
+f<- function(x) exp((-x^2/2)*sin(2*x)^2)
+curve(f,-5, 5, main = expression(paste('Plot of ', f(x)== e^(-x^2/2 )*sin(2*x)^2)),xlab='x',ylab='f(x)', sub='Plot of the f(x) on [-5,5]' )
+```
+
+```{r}
+f<- function(x) exp((-x^2/2)*sin(2*x)^2)
+curve(f,-5, 5)
+g <- function(x) 10*dnorm(x)
+curve(g, add = TRUE)
+```
+
+```{r}
+
+
+```
+
+## Question 2
+
+```{r}
+x<- rexp(N,rate = 2)
+
+```
+
+## Question 7
+
+```{r}
+
+```
