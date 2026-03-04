@@ -5,15 +5,8 @@ website:
   title: "Assignment2"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - href: Practice 1.qmd
-        text: Practical 1
-      - href: Day3_exercises.qmd
-        text: Day 3 Exercises
-      - href: PDay 4.qmd
-        text: Practical Day 4
-  
+      - href: Assignment2.qmd
+        text: Assignment 2
 
 format:
   html:
